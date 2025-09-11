@@ -10,8 +10,21 @@
 (require 'treesit)
 (setq treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-     ...
-     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")))
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (kotlin "https://github.com/fwcd/tree-sitter-kotlin")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 ;; General keybindings and preferences
 (setq make-backup-files nil)
@@ -41,9 +54,9 @@
  '(js-indent-level 2)
  '(js-switch-indent-offset 2)
  '(package-selected-packages
-   '(## company exec-path-from-shell flymake-eslint git-grep json-mode
-        kotlin-ts-mode markdown-mode string-inflection svelte-mode
-        web-mode yaml yaml-mode))
+   '(## add-node-modules-path company exec-path-from-shell flymake-eslint
+        git-grep json-mode kotlin-ts-mode markdown-mode
+        string-inflection svelte-mode web-mode yaml yaml-mode))
  '(select-enable-primary t)
  '(sort-fold-case t t)
  '(tab-width 2)
@@ -77,7 +90,6 @@
 (add-hook 'typescript-mode-hook #'my-typescript-setup)
 (add-hook 'after-load-hook #'add-node-modules-path)
 (add-hook 'typescript-mode-hook #'company-mode)
-
 
 ;;;; Vue
 ;;(add-to-list 'eglot-server-programs
