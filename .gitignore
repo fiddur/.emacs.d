@@ -1,0 +1,26 @@
+# Byte-compiled files
+*.elc
+
+# Backup files
+*~
+\#*#
+.elc
+#*
+.cache
+.lsp-session*
+
+# Auto-save files
+\#*
+
+# Emacs package management directories
+elpa/
+straight/
+eln-cache/
+tree-sitter/
+
+# Other automatically generated directories and files
+auto-save-list/
+custom.el
+recentf
+url/
+secrets.el
