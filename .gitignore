@@ -20,7 +20,6 @@ tree-sitter/
 
 # Other automatically generated directories and files
 auto-save-list/
-custom.el
 recentf
 url/
 secrets.el

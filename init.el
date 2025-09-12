@@ -1,10 +1,10 @@
-;; Standard Emacs package management setup
-(package-initialize)
-
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 
-(setq custom-file (expand-file-name "init.el" user-emacs-directory))
+(exec-path-from-shell-initialize)
+(require 'add-node-modules-path)
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'no-error 'no-message)
 
 ;; Treesitter configuration (keep this)
 (require 'treesit)
@@ -39,55 +39,15 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-;; Custom variables (you can keep these, but remove the JDEE and eslint-related ones)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(add-node-modules-path-command "pnpm bin")
- '(blink-cursor-mode nil)
- '(custom-enabled-themes '(deeper-blue))
- '(default-frame-alist '((vertical-scroll-bars . right)))
- '(global-font-lock-mode t nil (font-lock))
- '(indent-tabs-mode nil)
- '(js-indent-level 2)
- '(js-switch-indent-offset 2)
- '(package-install-upgrade-built-in t)
- '(package-selected-packages
-   '(## add-node-modules-path company exec-path-from-shell flymake-eslint
-        git-grep gptel json-mode kotlin-ts-mode markdown-mode prettier
-        string-inflection svelte-mode transient web-mode yaml
-        yaml-mode))
- '(select-enable-primary t)
- '(sort-fold-case t t)
- '(tab-width 2)
- '(typescript-indent-level 2))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; Package handling
+;; (package-refresh-contents)
+;; (unless (package-installed-p 'use-package) (package-install 'use-package))
+;; (eval-when-compile (require 'use-package))
+;; (require 'package)
+;; (dolist (pkg package-selected-packages) (unless (package-installed-p pkg) (package-install pkg)))
 
 ;;;; New setup for typescript, eglot etc
 (require 'eglot)
-;;(add-to-list 'package-selected-packages 'exec-path-from-shell)
-(require 'exec-path-from-shell)
-(exec-path-from-shell-initialize)
-(require 'add-node-modules-path)
-
-(defun my-typescript-setup ()
-  (add-node-modules-path)
-  (eglot-ensure)
-  (flymake-eslint-enable))
-
-(add-to-list 'eglot-server-programs
-             '(typescript-ts-base-mode . ("npx" "typescript-language-server" "--stdio")))
-
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
 
 (defun my-format-on-save ()
   (when (eglot-managed-p)
@@ -96,15 +56,22 @@
              (prettier-prettify))
             ((string= file-ext "ts")
              (eglot-format))))))
-
 (add-hook 'before-save-hook 'my-format-on-save)
-(add-hook 'after-load-hook #'add-node-modules-path)
-(add-hook 'typescript-ts-base-mode-hook #'company-mode)
-(add-hook 'typescript-ts-base-mode-hook #'my-typescript-setup)
+
+(add-to-list 'eglot-server-programs
+             '(typescript-ts-base-mode . ("npx" "typescript-language-server" "--stdio")))
+
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+
+(add-hook 'typescript-ts-base-mode-hook
+          (lambda ()
+            (add-node-modules-path)
+            (eglot-ensure)
+            (company-mode)
+            (flymake-eslint-enable)))
 
 ;;;; Vue
-;;(add-to-list 'eglot-server-programs
-;;             '((web-mode) . ("vue-language-server" "--stdio")))
 ;;(add-to-list 'eglot-server-programs
 ;;             '((web-mode) . ("pnpm" "npx" "vue-language-server" "--stdio")))
 (add-to-list 'eglot-server-programs
@@ -119,5 +86,7 @@
 
 
 ;;;; Copilot
+;; OPTIONAL configuration
+(setq gptel-model 'gpt-4o
+      gptel-backend (gptel-make-gh-copilot "Copilot"))
 
-(gptel-make-gh-copilot "Copilot")
