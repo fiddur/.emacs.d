@@ -55,7 +55,7 @@
  '(js-switch-indent-offset 2)
  '(package-selected-packages
    '(## add-node-modules-path company exec-path-from-shell flymake-eslint
-        git-grep json-mode kotlin-ts-mode markdown-mode
+        git-grep json-mode kotlin-ts-mode markdown-mode prettier
         string-inflection svelte-mode web-mode yaml yaml-mode))
  '(select-enable-primary t)
  '(sort-fold-case t t)
@@ -82,14 +82,23 @@
   (flymake-eslint-enable))
 
 (add-to-list 'eglot-server-programs
-             '(typescript-mode . ("npx" "typescript-language-server" "--stdio")))
+             '(typescript-ts-base-mode . ("npx" "typescript-language-server" "--stdio")))
 
-(defun my-format-on-save () (when (eglot-managed-p) (eglot-format)))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+
+(defun my-format-on-save ()
+  (when (eglot-managed-p)
+    (let ((file-ext (file-name-extension (buffer-file-name))))
+      (cond ((string= file-ext "tsx")
+             (prettier-prettify))
+            ((string= file-ext "ts")
+             (eglot-format))))))
+
 (add-hook 'before-save-hook 'my-format-on-save)
-
-(add-hook 'typescript-mode-hook #'my-typescript-setup)
 (add-hook 'after-load-hook #'add-node-modules-path)
-(add-hook 'typescript-mode-hook #'company-mode)
+(add-hook 'typescript-ts-base-mode-hook #'company-mode)
+(add-hook 'typescript-ts-base-mode-hook #'my-typescript-setup)
 
 ;;;; Vue
 ;;(add-to-list 'eglot-server-programs
