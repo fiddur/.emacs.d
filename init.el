@@ -53,10 +53,12 @@
  '(indent-tabs-mode nil)
  '(js-indent-level 2)
  '(js-switch-indent-offset 2)
+ '(package-install-upgrade-built-in t)
  '(package-selected-packages
    '(## add-node-modules-path company exec-path-from-shell flymake-eslint
-        git-grep json-mode kotlin-ts-mode markdown-mode prettier
-        string-inflection svelte-mode web-mode yaml yaml-mode))
+        git-grep gptel json-mode kotlin-ts-mode markdown-mode prettier
+        string-inflection svelte-mode transient web-mode yaml
+        yaml-mode))
  '(select-enable-primary t)
  '(sort-fold-case t t)
  '(tab-width 2)
@@ -114,3 +116,8 @@
             (when (string-equal (file-name-extension (buffer-file-name)) "vue")
               (add-node-modules-path)
               (eglot-ensure))))
+
+
+;;;; Copilot
+
+(gptel-make-gh-copilot "Copilot")
