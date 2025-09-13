@@ -49,14 +49,15 @@
 ;;;; New setup for typescript, eglot etc
 (require 'eglot)
 
-(defun my-format-on-save ()
-  (when (eglot-managed-p)
-    (let ((file-ext (file-name-extension (buffer-file-name))))
-      (cond ((string= file-ext "tsx")
-             (prettier-prettify))
-            ((string= file-ext "ts")
-             (eglot-format))))))
-(add-hook 'before-save-hook 'my-format-on-save)
+;; (defun my-format-on-save ()
+;;   (when (eglot-managed-p)
+;;     (let ((file-ext (file-name-extension (buffer-file-name))))
+;;       (cond ((string= file-ext "tsx")
+;;              (prettier-prettify))
+;;             ((string= file-ext "ts")
+;;              (eglot-format))))))
+;; (add-hook 'before-save-hook 'my-format-on-save)
+
 
 (add-to-list 'eglot-server-programs
              '(typescript-ts-base-mode . ("npx" "typescript-language-server" "--stdio")))
@@ -69,6 +70,7 @@
             (add-node-modules-path)
             (eglot-ensure)
             (company-mode)
+            (prettier-mode)
             (flymake-eslint-enable)))
 
 ;;;; Vue
