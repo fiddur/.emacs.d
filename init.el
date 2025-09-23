@@ -1,10 +1,19 @@
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 
-(exec-path-from-shell-initialize)
-(require 'add-node-modules-path)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'no-error 'no-message)
+
+;; Package handling
+(defun my-install-all ()
+ (package-refresh-contents)
+ (unless (package-installed-p 'use-package) (package-install 'use-package))
+ (eval-when-compile (require 'use-package))
+ (require 'package)
+ (dolist (pkg package-selected-packages) (unless (package-installed-p pkg) (package-install pkg))))
+
+(exec-path-from-shell-initialize)
+(require 'add-node-modules-path)
 
 ;; Treesitter configuration (keep this)
 (require 'treesit)
@@ -39,12 +48,6 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-;; Package handling
-;; (package-refresh-contents)
-;; (unless (package-installed-p 'use-package) (package-install 'use-package))
-;; (eval-when-compile (require 'use-package))
-;; (require 'package)
-;; (dolist (pkg package-selected-packages) (unless (package-installed-p pkg) (package-install pkg)))
 
 ;;;; New setup for typescript, eglot etc
 (require 'eglot)
@@ -75,7 +78,7 @@
 
 ;;;; Vue
 ;;(add-to-list 'eglot-server-programs
-;;             '((web-mode) . ("pnpm" "npx" "vue-language-server" "--stdio")))
+;;             '((web-mode) . ("vue-language-server" "--stdio")))
 (add-to-list 'eglot-server-programs
              '((web-mode) . ("pnpm" "npx" "vls" "--stdio")))
 
@@ -84,6 +87,7 @@
           (lambda ()
             (when (string-equal (file-name-extension (buffer-file-name)) "vue")
               (add-node-modules-path)
+              (prettier-mode)
               (eglot-ensure))))
 
 

@@ -5,6 +5,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(add-node-modules-path-command "pnpm bin")
+ '(auto-save-default nil)
  '(blink-cursor-mode nil)
  '(custom-enabled-themes '(deeper-blue))
  '(default-frame-alist '((vertical-scroll-bars . right)))
@@ -15,10 +16,11 @@
  '(js-switch-indent-offset 2)
  '(package-install-upgrade-built-in t)
  '(package-selected-packages
-   '(add-node-modules-path company flymake-eslint git-grep gptel
-                           json-mode kotlin-ts-mode markdown-mode
-                           prettier string-inflection svelte-mode
-                           transient web-mode yaml yaml-mode))
+   '(add-node-modules-path caser company exec-path-from-shell
+                           flymake-eslint git-grep gptel json-mode
+                           kotlin-ts-mode markdown-mode prettier
+                           string-inflection svelte-mode transient
+                           web-mode yaml yaml-mode))
  '(select-enable-primary t)
  '(sort-fold-case t t)
  '(tab-width 2)
