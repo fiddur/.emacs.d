@@ -15,6 +15,20 @@
 (exec-path-from-shell-initialize)
 (require 'add-node-modules-path)
 
+(defun my/add-monorepo-node-modules-path ()
+  "Search for the project root (git root) and add its node_modules/.bin to exec-path."
+  (interactive)
+  (let* ((root (locate-dominating-file (buffer-file-name) ".git"))
+         (modules (expand-file-name "node_modules/.bin/" root)))
+    (when (and root (file-directory-p modules))
+      (make-local-variable 'exec-path)
+      (add-to-list 'exec-path modules)
+      (make-local-variable 'process-environment)
+      (setenv "PATH" (concat modules ":" (getenv "PATH"))))))
+
+
+(load custom-file 'no-error 'no-message)
+
 ;; Treesitter configuration (keep this)
 (require 'treesit)
 (setq treesit-language-source-alist
@@ -48,35 +62,29 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-
-;;;; New setup for typescript, eglot etc
-(require 'eglot)
-
-;; (defun my-format-on-save ()
-;;   (when (eglot-managed-p)
-;;     (let ((file-ext (file-name-extension (buffer-file-name))))
-;;       (cond ((string= file-ext "tsx")
-;;              (prettier-prettify))
-;;             ((string= file-ext "ts")
-;;              (eglot-format))))))
-;; (add-hook 'before-save-hook 'my-format-on-save)
-
-
-(add-to-list 'eglot-server-programs
-             '(typescript-ts-base-mode . ("npx" "typescript-language-server" "--stdio")))
-
+;; Typscript/tsx setup with tide
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
 
+;; Check syntax only on save, not on edit
+; (setq flycheck-check-syntax-automatically '(save mode-enabled))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
 (add-hook 'typescript-ts-base-mode-hook
           (lambda ()
-            (add-node-modules-path)
-            (eglot-ensure)
+            (my/add-monorepo-node-modules-path)
+            (tide-setup)
+            (flycheck-mode)
+            (eldoc-mode)
             (company-mode)
             (prettier-mode)
-            (flymake-eslint-enable)))
+            (tide-hl-identifier-mode +1)
+            ))
 
 ;;;; Vue
+(require 'eglot)
 ;;(add-to-list 'eglot-server-programs
 ;;             '((web-mode) . ("vue-language-server" "--stdio")))
 (add-to-list 'eglot-server-programs
