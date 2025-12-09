@@ -79,7 +79,7 @@
             (flycheck-mode)
             (eldoc-mode)
             (company-mode)
-            (prettier-mode)
+            (prettier-js-mode)
             (tide-hl-identifier-mode +1)
             ))
 
@@ -95,7 +95,7 @@
           (lambda ()
             (when (string-equal (file-name-extension (buffer-file-name)) "vue")
               (add-node-modules-path)
-              (prettier-mode)
+              (prettier-js-mode)
               (eglot-ensure))))
 
 

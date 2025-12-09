@@ -18,11 +18,11 @@
  '(package-selected-packages
    '(add-node-modules-path caser company exec-path-from-shell
                            flymake-eslint git-grep gptel json-mode
-                           kotlin-ts-mode markdown-mode prettier
+                           kotlin-ts-mode markdown-mode prettier-js
                            string-inflection svelte-mode tide
                            transient web-mode yaml yaml-mode))
  '(select-enable-primary t)
- '(sort-fold-case t t)
+ '(sort-fold-case t)
  '(tab-width 2)
  '(typescript-indent-level 2))
 
