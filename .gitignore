@@ -23,3 +23,6 @@ auto-save-list/
 recentf
 url/
 secrets.el
+tramp
+transient/
+projects

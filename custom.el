@@ -15,12 +15,11 @@
  '(js-indent-level 2)
  '(js-switch-indent-offset 2)
  '(package-install-upgrade-built-in t)
- '(package-selected-packages
-   '(add-node-modules-path caser company exec-path-from-shell
-                           flymake-eslint git-grep gptel json-mode
-                           kotlin-ts-mode markdown-mode prettier-js
-                           string-inflection svelte-mode tide
-                           transient web-mode yaml yaml-mode))
+ '(package-selected-packages nil)
+ '(package-vc-selected-packages
+   '((monet :url "https://github.com/stevemolitor/monet")
+     (claude-code :url
+                  "https://github.com/stevemolitor/claude-code.el")))
  '(select-enable-primary t)
  '(sort-fold-case t)
  '(tab-width 2)
